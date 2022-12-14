@@ -92,9 +92,8 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-family: 'Raleway', 'Roboto';
   vertical-align: baseline;
-  font-family: 'Roboto', sans-serif;
 }
 
 /* HTML5 display-role reset for older browsers */
