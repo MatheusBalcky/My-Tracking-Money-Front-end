@@ -1,29 +1,37 @@
-import styled from "styled-components"
-import { IoIosArrowDown } from "react-icons/io";
-import { useState} from 'react'
+import styled from 'styled-components';
+import { IoIosArrowDown } from 'react-icons/io';
+import { useState } from 'react';
+import { BackgroundPropsI, MonthOptionsI } from './interfacesAndDatas';
 
-interface SelectMonth {
-  months: String[]
-}
+export default function SelectMonth(props: { months: string[] }) {
+  const [monthsIsFlex, setMonthsEnable] = useState('displaynone');
+  const [currentMonth, setCurrentMonth] = useState('Novembro');
 
-export default function SelectMonth(props: SelectMonth) {
-  const [monthsHidden, setMonthsEnable] = useState(true);
-
-  const openMonths = () =>{
-    setMonthsEnable(!monthsHidden);
+  function openMonths() {
+    if (monthsIsFlex === 'displaynone') return setMonthsEnable('displayflex');
+    setMonthsEnable('displaynone');
   }
-  
+
+  function selectMonth(item: string) {
+    setCurrentMonth(item);
+    setMonthsEnable('displaynone');
+  }
+
   return (
     <Container>
-      <Background onClick={openMonths} monthsHidden={monthsHidden}>
-        <p>Dezembro</p>
+      <Background onClick={openMonths} monthsIsFlex={monthsIsFlex}>
+        <p>{currentMonth}</p>
         <IoIosArrowDown className="arrowDown" />
       </Background>
-      <MonthOptions hidden={monthsHidden}>
-        <p>Janeiro</p>
-        <p>Janeiro</p>
-        <p>Janeiro</p>
-        <p>Janeiro</p>
+      <MonthOptions monthsIsFlex={monthsIsFlex} className={monthsIsFlex}>
+        {props.months.map((item, index) => {
+          if (item === currentMonth) return;
+          return (
+            <p onClick={() => selectMonth(item)} key={index}>
+              {item}
+            </p>
+          );
+        })}
       </MonthOptions>
     </Container>
   );
@@ -33,12 +41,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-`
+`;
 
-interface BackgroundProps {
-  monthsHidden: Boolean
-}
-const Background = styled.div<BackgroundProps>`
+const Background = styled.div<BackgroundPropsI>`
   box-sizing: border-box;
   display: flex;
   width: 100px;
@@ -47,18 +52,32 @@ const Background = styled.div<BackgroundProps>`
   background-color: black;
   padding: 10px 7px;
   border-radius: ${(props) =>
-    props.monthsHidden ? "1em 1em 1em 1em" : "1em 1em 0em 0em"};
+    props.monthsIsFlex === 'displaynone'
+      ? '1em 1em 1em 1em'
+      : '1em 1em 0em 0em'};
   cursor: pointer;
+  transition: all 1s;
   p,
   .arrowDown {
     color: white;
     font-weight: bold;
     font-size: 0.8em;
   }
+  .arrowDown {
+    transform: ${(props) =>
+      props.monthsIsFlex === 'displaynone' ? null : 'rotate(180deg)'};
+    transition: all 1s;
+  }
+  &:hover > .arrowDown,
+  &:hover > p {
+    color: #8af77b;
+  }
 `;
 
-const MonthOptions = styled.div`
-  display: ${(props) => (props.hidden ? "none" : "flex")};
+const MonthOptions = styled.div<MonthOptionsI>`
+  display: ${(props) =>
+    props.monthsIsFlex === 'displaynone' ? 'none' : 'flex'};
+  transition: all 1s;
   flex-direction: column;
   gap: 7px;
   box-sizing: border-box;
@@ -68,11 +87,28 @@ const MonthOptions = styled.div`
   border-radius: 0em 0em 1em 1em;
   position: absolute;
   top: 27px;
+  transition: all 1s ease;
   p {
+    cursor: pointer;
     color: white;
     font-weight: bold;
     font-size: 0.8em;
   }
+  p:hover {
+    color: #8af77b;
+  }
+
+  &.displayflex {
+    animation: fade 1s ease;
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+      top: 10px;
+    }
+    to {
+      opacity: 1;
+      top: 27px;
+    }
+  }
 `;
-
-

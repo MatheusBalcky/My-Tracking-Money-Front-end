@@ -1,13 +1,8 @@
-import styled from "styled-components";
-import { IoIosArrowDown } from "react-icons/io";
-import {
-  IoExitOutline,
-  IoWallet,
-  IoEyeOffOutline,
-  IoEyeOutline,
-} from "react-icons/io5";
-import SelectMonth from "../components/homeComponents/selectMonth";
-
+import styled from 'styled-components';
+import { IoExitOutline } from 'react-icons/io5';
+import SelectMonth from '../components/homeComponents/selectMonth';
+import { months } from '../components/homeComponents/interfacesAndDatas';
+import MoneyBalance from '../components/homeComponents/moneyBalance';
 
 export default function HomePage() {
   return (
@@ -19,13 +14,9 @@ export default function HomePage() {
         </div>
 
         <InfoHeader>
-          <SelectMonth months={["a"]} />
+          <SelectMonth months={months} />
 
-          <div className="moneyBalance">
-            <IoWallet className="walletIcon" />
-            <span>R$ 2.849,96</span>
-            <IoEyeOffOutline />
-          </div>
+          <MoneyBalance />
         </InfoHeader>
       </Header>
       <Dashboard></Dashboard>
