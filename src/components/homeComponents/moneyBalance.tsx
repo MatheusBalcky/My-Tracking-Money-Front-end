@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { IoWallet, IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import formatValueToBr from '../../utils/formatValues';
 
 export default function MoneyBalance() {
   const [moneyHidden, setMoneyHidden] = useState(false);
@@ -12,7 +13,7 @@ export default function MoneyBalance() {
   return (
     <MoneyBalanceContainer hidden={moneyHidden}>
       <IoWallet className="walletIcon" />
-      <span>R$ 2.849,96</span>
+      <span>{formatValueToBr(2849.54)}</span>
       {moneyHidden ? (
         <IoEyeOutline className="iconEye" onClick={changeVisibility} />
       ) : (
