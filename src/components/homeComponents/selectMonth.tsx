@@ -88,6 +88,8 @@ const MonthOptions = styled.div<MonthOptionsI>`
   position: absolute;
   top: 27px;
   transition: all 1s ease;
+  z-index: ${(props) =>
+    props.monthsIsFlex === 'displaynone' ? null : 1};
   p {
     cursor: pointer;
     color: white;
