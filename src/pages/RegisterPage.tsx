@@ -11,7 +11,7 @@ export default function RegisterPage() {
     <BackgroundLoginPage>
       <h1>My Money Tracking</h1>
 
-      <FormLoginPage onSubmit={(e) => register(e)}>
+      <FormLoginPage onSubmit={register}>
         <input type="text" placeholder="Nome" />
         <input type="email" placeholder="E-mail" />
         <input type="password" placeholder="Senha" />
