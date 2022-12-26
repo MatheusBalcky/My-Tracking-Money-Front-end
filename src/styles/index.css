@@ -87,7 +87,7 @@ summary,
 time,
 mark,
 audio,
-video, button {
+video, button, textarea, input, select {
   margin: 0;
   padding: 0;
   border: 0;

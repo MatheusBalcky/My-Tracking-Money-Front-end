@@ -6,12 +6,9 @@ import {
 } from 'react-icons/io5';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
 import { HiArrowsRightLeft } from 'react-icons/hi2';
-import SelectMonth from '../components/homeComponents/selectMonth';
-import {
-  months,
-  transactionsExample,
-} from '../components/homeComponents/interfacesAndDatas';
-import MoneyBalance from '../components/homeComponents/moneyBalance';
+import SelectMonth from './homeComponents/selectMonth';
+import { months, transactionsExample } from './interfaces/interfacesAndDatas';
+import MoneyBalance from './homeComponents/moneyBalance';
 import { useNavigate } from 'react-router-dom';
 import formatValueToBr from '../utils/formatValues';
 
