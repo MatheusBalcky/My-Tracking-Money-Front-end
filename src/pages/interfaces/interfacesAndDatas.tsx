@@ -1,4 +1,3 @@
-
 export interface BackgroundPropsI {
   monthsIsFlex: string;
 }
@@ -33,11 +32,18 @@ export const months = [
   'Dezembro',
 ];
 
+export const categories = [
+  { name: 'Comida', cor: '#FF3030' },
+  { name: 'Beleza', cor: '#FFE601' },
+  { name: 'Casa', cor: '#00D1FF' },
+  { name: 'Animal', cor: '#00A725' },
+];
+
 export const dictionaryCategories = {
   A: 1,
   B: 2,
-  C: 3
-}
+  C: 3,
+};
 
 export type dictionaryCategoriesI = typeof dictionaryCategories;
 
@@ -46,7 +52,7 @@ export const transactionsExample = [
     id: 555,
     title: 'Gasolina',
     type: 'out',
-    value: 15.00,
+    value: 15.0,
     date: '30/11',
   },
   {
@@ -60,7 +66,7 @@ export const transactionsExample = [
     id: 540,
     title: 'Sálario',
     type: 'enter',
-    value: 3000.00,
+    value: 3000.0,
     date: '15/11',
   },
 ];
