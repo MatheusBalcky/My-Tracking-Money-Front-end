@@ -41,7 +41,7 @@ export default function HomePage() {
             <TransactionComponent key={item.id} about={item.type}>
               <div className="dateAndName">
                 <p className="date">{item.date}</p>
-                <p>{item.title}</p>
+                <p className='title'>{item.title}</p>
               </div>
               <p className="value">{formatValueToBr(item.value)}</p>
             </TransactionComponent>
@@ -66,14 +66,14 @@ export default function HomePage() {
           <p>Transações</p>
         </IconFooter>
 
-        <IconFooter
+{/*         <IconFooter
           onClick={() => {
             navigate('/my-wallet');
           }}
         >
           <IoWalletOutline className="iconMenu" />
           <p>Carteira</p>
-        </IconFooter>
+        </IconFooter> */}
 
         <IconFooter
           onClick={() => {
@@ -197,6 +197,11 @@ const TransactionComponent = styled.div`
   .value {
     color: ${(props) => (props.about === 'out' ? 'red' : '#03AC00')};
     font-weight: 500;
+  }
+
+  .title:hover{
+    cursor: pointer;
+    font-weight: bold;
   }
 `;
 
