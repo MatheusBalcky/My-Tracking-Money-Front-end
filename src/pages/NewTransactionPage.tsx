@@ -245,6 +245,10 @@ const Form = styled.form`
     border-radius: 5px;
   }
 
+  select{
+    cursor: pointer;
+  }
+
   textarea {
     height: 130px;
     resize: none;
