@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IoExitOutline, IoWalletOutline, IoSettingsOutline } from 'react-icons/io5';
+import { IoExitOutline, IoSettingsOutline } from 'react-icons/io5';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
 import { HiArrowsRightLeft } from 'react-icons/hi2';
 import SelectMonth from './homeComponents/selectMonth';
@@ -61,15 +61,6 @@ export default function HomePage() {
           <HiArrowsRightLeft className="iconMenu" />
           <p>Transações</p>
         </IconFooter>
-
-        {/*         <IconFooter
-          onClick={() => {
-            navigate('/my-wallet');
-          }}
-        >
-          <IoWalletOutline className="iconMenu" />
-          <p>Carteira</p>
-        </IconFooter> */}
 
         <IconFooter
           onClick={() => {
