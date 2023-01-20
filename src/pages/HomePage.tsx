@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import {
-  IoExitOutline,
-  IoWalletOutline,
-  IoSettingsOutline,
-} from 'react-icons/io5';
+import { IoExitOutline, IoWalletOutline, IoSettingsOutline } from 'react-icons/io5';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
 import { HiArrowsRightLeft } from 'react-icons/hi2';
 import SelectMonth from './homeComponents/selectMonth';
@@ -41,7 +37,7 @@ export default function HomePage() {
             <TransactionComponent key={item.id} about={item.type}>
               <div className="dateAndName">
                 <p className="date">{item.date}</p>
-                <p className='title'>{item.title}</p>
+                <p className="title">{item.title}</p>
               </div>
               <p className="value">{formatValueToBr(item.value)}</p>
             </TransactionComponent>
@@ -66,7 +62,7 @@ export default function HomePage() {
           <p>Transações</p>
         </IconFooter>
 
-{/*         <IconFooter
+        {/*         <IconFooter
           onClick={() => {
             navigate('/my-wallet');
           }}
@@ -199,7 +195,7 @@ const TransactionComponent = styled.div`
     font-weight: 500;
   }
 
-  .title:hover{
+  .title:hover {
     cursor: pointer;
     font-weight: bold;
   }
