@@ -7,26 +7,28 @@ import { months, transactionsExample } from './interfaces/interfacesAndDatas';
 import MoneyBalance from './homeComponents/moneyBalance';
 import { useNavigate } from 'react-router-dom';
 import formatValueToBr from '../utils/formatValues';
+import { useCallback } from 'react';
 
 export default function HomePage() {
   const navigate = useNavigate();
-
-  function logout() {
+  const navigateNewTransaction = useCallback(() => navigate('/new-transaction'), []);
+  const navigateHome = useCallback(() => navigate('/home'), []);
+  const navigateSettings = useCallback(() => navigate('/settings'), []);
+  const handleLogout = useCallback(() => {
     alert('Deslogando da aplicação');
     navigate('/apresentation');
-  }
+  }, []);
 
   return (
     <BackgroundHomePage>
       <Header>
         <div className="topHeader">
           <h1> &gt; Ola, Fulano</h1>
-          <IoExitOutline onClick={logout} className="iconExit" />
+          <IoExitOutline onClick={handleLogout} className="iconExit" />
         </div>
 
         <InfoHeader>
           <SelectMonth months={months} />
-
           <MoneyBalance />
         </InfoHeader>
       </Header>
@@ -43,30 +45,16 @@ export default function HomePage() {
             </TransactionComponent>
           );
         })}
-
-        <BsFillPlusCircleFill
-          onClick={() => {
-            navigate('/new-transaction');
-          }}
-          className="plusButton"
-        />
+        <BsFillPlusCircleFill onClick={navigateNewTransaction} className="plusButton" />
       </BodyTransactions>
 
       <Footer>
-        <IconFooter
-          onClick={() => {
-            navigate('/home');
-          }}
-        >
+        <IconFooter onClick={navigateHome}>
           <HiArrowsRightLeft className="iconMenu" />
           <p>Transações</p>
         </IconFooter>
 
-        <IconFooter
-          onClick={() => {
-            navigate('/settings');
-          }}
-        >
+        <IconFooter onClick={navigateSettings}>
           <IoSettingsOutline className="iconMenu" />
           <p>Configurações</p>
         </IconFooter>

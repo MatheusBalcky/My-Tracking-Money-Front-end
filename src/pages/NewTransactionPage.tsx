@@ -1,52 +1,41 @@
 import styled from 'styled-components';
 import { IoArrowBackOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import CurrencyInput from 'react-currency-input-field';
-import {
-  transcationFormI,
-  inputsFormI,
-  dictionaryCategories,
-  dictionaryCategoriesI,
-} from './interfaces/interfacesAndDatas';
+import { transcationFormI, dictionaryCategories, dictionaryCategoriesI } from './interfaces/interfacesAndDatas';
+import { useForm, useController } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z, string, number } from 'zod';
+import Select from 'react-select';
 
-const options = ['A', 'B', 'C'];
+const options = [
+  { value: 'B', label: 'B' },
+  { value: 'C', label: 'C' },
+  { value: 'D', label: 'D' },
+];
+
+type optionsI = typeof options;
 
 export default function NewTransactionPage() {
   const navigate = useNavigate();
-  const [transactionType, setTransactionType] = useState<'enter' | 'out'>(
-    'enter'
-  );
-
-  function selectTransaction(transcationType: 'enter' | 'out') {
-    setTransactionType(transcationType);
-  }
+  const navigateHome = useCallback(() => navigate('/home'), []);
+  const [transactionType, setTransactionType] = useState<'enter' | 'out'>('enter');
 
   return (
     <BackgroundNewTransaction>
       <Header>
         <h1>Nova transação</h1>
-        <IoArrowBackOutline
-          onClick={() => {
-            navigate('/home');
-          }}
-          className="arrowBackIco"
-        />
+        <IoArrowBackOutline onClick={navigateHome} className="arrowBackIco" />
       </Header>
 
       <Body>
         <h1>Escolha um tipo de transação</h1>
         <Buttons about={transactionType}>
-          <button
-            onClick={() => selectTransaction('enter')}
-            className="enterButton"
-          >
+          <button onClick={() => setTransactionType('enter')} className="enterButton">
             Entrada
           </button>
-          <button
-            onClick={() => selectTransaction('out')}
-            className="outButton"
-          >
+          <button onClick={() => setTransactionType('out')} className="outButton">
             Saída
           </button>
         </Buttons>
@@ -57,86 +46,65 @@ export default function NewTransactionPage() {
   );
 }
 
+//! refatorar
 function TransactionForm({ transactionType }: transcationFormI) {
-  const [formInputs, setFormInputs] = useState<inputsFormI>({
-    title: '',
-    type: transactionType,
-    value: 0,
-    category: undefined,
-    description: '',
-  });
+  // prettier-ignore
+  const {register, handleSubmit, control ,watch, setValue, formState: { errors }} = useForm<transactionI>({ resolver: zodResolver(transactionSchema) });
+  const [, /* formInputs */ setFormInputs] = useState({ type: transactionType });
+  const currencyOnChange = useCallback((value: string | undefined) => {
+    const valueFormated = value?.replace(',', '.');
+    setValue('value', Number(valueFormated));
+  }, []);
+  const { field } = useController({ name: 'categoryId', control });
 
-  function test(e: React.FormEvent) {
-    e.preventDefault();
-    console.log('Salvando transação');
-  }
+  const handleSelectChange = (option: any) => {
+    console.log(option.value);
+    field.onChange(option.value);
+  };
+
+  console.log(watch(), errors);
+
+  const onSubmit = handleSubmit(() => {});
 
   useEffect(() => {
-    setFormInputs({ ...formInputs, type: transactionType });
+    setFormInputs({ type: transactionType });
   }, [transactionType]);
 
   return (
-    <Form onSubmit={test} about={transactionType}>
-      <input
-        required
-        value={formInputs.title}
-        onChange={(e) =>
-          setFormInputs({
-            ...formInputs,
-            title: e.target.value,
-          })
-        }
-        type="text"
-        placeholder="Título"
-      />
+    <Form onSubmit={onSubmit} about={transactionType}>
+      <input {...register('title')} type="text" placeholder="Título" />
 
-      <CurrencyInput
-        required
-        placeholder="R$ Valor"
-        prefix="R$ "
-        decimalsLimit={2}
-        decimalSeparator=","
-        groupSeparator="."
-        onValueChange={(value) => {
-          const valueFormated = value?.replace(',', '.');
-          setFormInputs({ ...formInputs, value: Number(valueFormated) });
-        }}
-      />
+      <CurrencyInput {...register('value')} required placeholder="R$ Valor" prefix="R$ " decimalsLimit={2} decimalSeparator="," groupSeparator="." onValueChange={currencyOnChange} />
 
-      <select
+      <Select
+        value={field.value}
         defaultValue={'default'}
-        onChange={(e) => {
-          const categorieSelectedId =
-            dictionaryCategories[e.target.value as keyof dictionaryCategoriesI];
+        options={options}
+        onChange={handleSelectChange}
+        /*         onChange={(e) => {
+          const categorieSelectedId = dictionaryCategories[e.target.value as keyof dictionaryCategoriesI];
           setFormInputs({
             ...formInputs,
             category: categorieSelectedId,
           });
-        }}
-      >
-        <option hidden disabled value={'default'}>
-          Escolha uma categoria
-        </option>
-        {options.map((option, index) => {
-          return <option key={index}>{option}</option>;
-        })}
-      </select>
+        }} */
+      ></Select>
 
-      <textarea
-        value={formInputs.description}
-        onChange={(e) =>
-          setFormInputs({
-            ...formInputs,
-            description: e.target.value,
-          })
-        }
-        placeholder="Pequena descrição"
-      />
+      <textarea {...register('description')} placeholder="Pequena descrição" />
 
       <ButtonConfirm>Salvar transação</ButtonConfirm>
     </Form>
   );
 }
+
+const transactionSchema = z.object({
+  title: string(),
+  value: number(),
+  description: string(),
+  categoryId: string(),
+});
+
+type transactionI = z.infer<typeof transactionSchema>;
 
 // & CSS STYLED COMPONENTS
 
@@ -190,8 +158,7 @@ const Buttons = styled.div`
     border: ${(props) => (props.about === 'enter' ? '3px solid white' : null)};
     cursor: ${(props) => (props.about === 'enter' ? 'default' : 'pointer')};
     &:hover {
-      animation: ${(props) =>
-        props.about === 'enter' ? null : 'float 1s infinite'};
+      animation: ${(props) => (props.about === 'enter' ? null : 'float 1s infinite')};
     }
   }
   .outButton {
@@ -199,8 +166,7 @@ const Buttons = styled.div`
     border: ${(props) => (props.about === 'out' ? '3px solid white' : null)};
     cursor: ${(props) => (props.about === 'out' ? 'default' : 'pointer')};
     &:hover {
-      animation: ${(props) =>
-        props.about === 'out' ? null : 'float 1s infinite'};
+      animation: ${(props) => (props.about === 'out' ? null : 'float 1s infinite')};
     }
   }
 
@@ -245,13 +211,14 @@ const Form = styled.form`
     border-radius: 5px;
   }
 
-  select{
+  select {
     cursor: pointer;
   }
 
   textarea {
     height: 130px;
     resize: none;
+    font-size: 0.9em;
   }
 
   input::-webkit-outer-spin-button,
